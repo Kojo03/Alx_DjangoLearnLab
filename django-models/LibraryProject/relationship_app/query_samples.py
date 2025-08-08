@@ -34,3 +34,13 @@ except Library.DoesNotExist:
     print(f"No library found with name: {library_name}")
 except Librarian.DoesNotExist:
     print(f"No librarian assigned to {library_name}")
+
+# Query 4: Find the librarian for a specific library object.
+try:
+    library_object = Library.objects.get(name=library_name)
+    librarian = Librarian.objects.get(library=library_object)
+    print(f"\nLibrarian for {library_name} (found by library object): {librarian.name}")
+except Library.DoesNotExist:
+    print(f"No library found with name: {library_name}")
+except Librarian.DoesNotExist:
+    print(f"No librarian found for the library: {library_name}")
