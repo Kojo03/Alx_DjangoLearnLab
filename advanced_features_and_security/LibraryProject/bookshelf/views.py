@@ -15,3 +15,13 @@ def raise_exception(request):
 
 def books(request):
     return HttpResponse("This is the books view.")
+
+def form_example_view(request):
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+            return HttpResponse("Form submitted successfully!")
+    else:
+        form = ExampleForm()
+    return render(request, 'bookshelf/form_example.html', {'form': form})
