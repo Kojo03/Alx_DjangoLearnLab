@@ -1,0 +1,42 @@
+# Ignore user-specific files and directories
+../.CFUserTextEncoding
+../.DS_Store
+../.cups/
+../.gitconfig
+../.gitmodules
+../.idlerc/
+../.lesshst
+../.mysql_history
+../.python_history
+../.ssh/
+../.vscode/
+../.zprofile
+../.zsh_history
+../.zsh_sessions/
+../.zshrc
+../ALX/
+../Applications/
+../Desktop/
+../Documents/
+../Downloads/
+../Library/
+../Movies/
+../Music/
+../NexusBackups/
+../Pictures/
+../Public/
+../PyCharmMiscProject/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-selfcheck.json
+
+# Django
+*.log
+db.sqlite3
