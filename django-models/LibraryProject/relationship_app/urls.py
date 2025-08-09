@@ -1,14 +1,12 @@
 from django.urls import path
-from .views import (
-    list_books,
-    LibraryDetailView,
-    CustomLoginView,
-    CustomLogoutView,
-    register,
-    add_book,
-    edit_book,
-    delete_book,
-)
+from .views import list_books
+from .views import LibraryDetailView
+from .views import CustomLoginView
+from .views import CustomLogoutView
+from .views import register
+from .views import add_book
+from .views import edit_book
+from .views import delete_book
 
 urlpatterns = [
     path('books/', list_books, name='list_books'),
