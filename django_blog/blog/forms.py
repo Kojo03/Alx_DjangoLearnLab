@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, Post
+
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True, help_text="Required. Enter a valid email address.")
@@ -17,13 +18,23 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
 
+
 class UserProfileForm(forms.ModelForm):
+    """Form to update built-in User model fields"""
     class Meta:
         model = User
         fields = ("username", "email", "first_name", "last_name")
+
 
 class ProfileForm(forms.ModelForm):
     """Form to update extended Profile model"""
     class Meta:
         model = Profile
         fields = ("bio", "profile_picture")
+
+
+class PostForm(forms.ModelForm):
+    """Form to create and update blog posts"""
+    class Meta:
+        model = Post
+        fields = ["title", "content"]
