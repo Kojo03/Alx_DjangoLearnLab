@@ -3,7 +3,8 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, redirect
+from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -25,11 +26,22 @@ class PostListView(ListView):
     ordering = ["-published_date"]
 
     def get_queryset(self):
+        queryset = super().get_queryset()
         tag_slug = self.kwargs.get('tag_slug')
+        query = self.request.GET.get('query')
+
         if tag_slug:
             tag = get_object_or_404(Tag, slug=tag_slug)
-            return Post.objects.filter(tags__in=[tag])
-        return Post.objects.all()
+            queryset = queryset.filter(tags__in=[tag])
+
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)
+            ).distinct()
+
+        return queryset
 
 
 # View a single post
