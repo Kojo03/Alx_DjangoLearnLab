@@ -15,12 +15,21 @@ from .models import Post, Profile, Comment
 # Blog Post Views (CRUD)
 # -------------------------
 
+from taggit.models import Tag
+
 # List all posts
 class PostListView(ListView):
     model = Post
     template_name = "blog/post_list.html"
     context_object_name = "posts"
-    ordering = ["-created_at"]
+    ordering = ["-published_date"]
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        if tag_slug:
+            tag = get_object_or_404(Tag, slug=tag_slug)
+            return Post.objects.filter(tags__in=[tag])
+        return Post.objects.all()
 
 
 # View a single post
@@ -33,7 +42,7 @@ class PostDetailView(DetailView):
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = "blog/post_form.html"
-    fields = ["title", "content"]
+    fields = ["title", "content", "tags"]
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -44,7 +53,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     template_name = "blog/post_form.html"
-    fields = ["title", "content"]
+    fields = ["title", "content", "tags"]
 
     def test_func(self):
         post = self.get_object()
