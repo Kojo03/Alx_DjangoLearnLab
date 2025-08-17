@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from .forms import CustomUserCreationForm, UserProfileForm, ProfileForm
+from .forms import CustomUserCreationForm, UserProfileForm, ProfileForm, CommentForm
 from .models import Post, Profile, Comment
 
 
@@ -68,7 +68,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
-    fields = ['content']
+    form_class = CommentForm
     template_name = 'blog/comment_form.html'
 
     def form_valid(self, form):
@@ -81,7 +81,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment
-    fields = ['content']
+    form_class = CommentForm
     template_name = 'blog/comment_form.html'
 
     def test_func(self):
