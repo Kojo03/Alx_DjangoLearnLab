@@ -26,22 +26,23 @@ class PostListView(ListView):
     ordering = ["-published_date"]
 
     def get_queryset(self):
-        queryset = super().get_queryset()
         tag_slug = self.kwargs.get('tag_slug')
         query = self.request.GET.get('query')
 
         if tag_slug:
             tag = get_object_or_404(Tag, slug=tag_slug)
-            queryset = queryset.filter(tags__in=[tag])
+            posts = Post.objects.filter(tags__in=[tag])
+        else:
+            posts = Post.objects.all()
 
         if query:
-            queryset = queryset.filter(
+            posts = posts.filter(
                 Q(title__icontains=query) |
                 Q(content__icontains=query) |
                 Q(tags__name__icontains=query)
             ).distinct()
 
-        return queryset
+        return posts
 
 
 # View a single post
