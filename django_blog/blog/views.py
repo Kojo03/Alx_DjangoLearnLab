@@ -24,24 +24,32 @@ class PostListView(ListView):
     template_name = "blog/post_list.html"
     context_object_name = "posts"
     ordering = ["-published_date"]
+    paginate_by = 5
 
     def get_queryset(self):
-        tag_slug = self.kwargs.get('tag_slug')
         query = self.request.GET.get('query')
-
-        if tag_slug:
-            tag = get_object_or_404(Tag, slug=tag_slug)
-            posts = Post.objects.filter(tags__in=[tag])
-        else:
-            posts = Post.objects.all()
-
+        posts = Post.objects.all()
         if query:
             posts = posts.filter(
                 Q(title__icontains=query) |
                 Q(content__icontains=query) |
                 Q(tags__name__icontains=query)
             ).distinct()
+        return posts
 
+
+# List posts by tag
+class PostByTagListView(ListView):
+    model = Post
+    template_name = "blog/post_list.html"
+    context_object_name = "posts"
+    ordering = ["-published_date"]
+    paginate_by = 5
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        posts = Post.objects.filter(tags__in=[tag])
         return posts
 
 
