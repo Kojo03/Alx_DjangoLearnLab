@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
 
 # DEBUG (must be False in production!)
-DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() == "true"
+DEBUG = False
 
 # Allowed hosts (set in env for production)
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "your-app.onrender.com,yourcustomdomain.com").split(",")
