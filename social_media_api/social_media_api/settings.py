@@ -87,12 +87,28 @@ WSGI_APPLICATION = 'social_media_api.wsgi.application'
 # -------------------------
 # DATABASE
 # -------------------------
-DATABASES = {
-    "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
-        conn_max_age=600,
-    )
-}
+# Use dj_database_url to parse the DATABASE_URL environment variable
+db_from_env = dj_database_url.config(conn_max_age=600)
+
+# If DATABASE_URL is not set, fall back to SQLite
+if not db_from_env:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': db_from_env['NAME'],
+            'USER': db_from_env['USER'],
+            'PASSWORD': db_from_env['PASSWORD'],
+            'HOST': db_from_env['HOST'],
+            'PORT': db_from_env['PORT'],
+        }
+    }
 
 # -------------------------
 # PASSWORD VALIDATION
