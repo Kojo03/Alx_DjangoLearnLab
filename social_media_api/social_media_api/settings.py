@@ -44,7 +44,7 @@ INSTALLED_APPS = [
 ]
 
 # Custom User Model
-AUTH_USER_MODEL = "accounts.User"
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 # DRF settings (merged)
 REST_FRAMEWORK = {
